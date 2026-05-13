@@ -1,0 +1,8 @@
+# # Secrets and environment
+# secrets/
+# *.txt
+# srcs/.env
+
+# #OS files
+# .DS_Store
+# # *.png
