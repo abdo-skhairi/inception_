@@ -84,3 +84,6 @@ volumes:
       o: bind
       type: none
       device: /home/abdo/data/wordpress
+
+
+    
