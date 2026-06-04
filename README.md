@@ -15,3 +15,6 @@ The mandatory part includes three services:
 - **WordPress (PHP-FPM)** – Application layer
 - **MariaDB** – Database service
 
+## 📌resources : 
+
+https://medium.com/@ssterdev/inception-guide-42-project-part-i-7e3af15eb671
