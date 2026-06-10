@@ -9,6 +9,9 @@ stop:
 down:
 	docker-compose -f ./srcs/Docker-compose.yml down
 
+down-v:
+	docker-compose -f ./srcs/Docker-compose.yml down -v
+
 rmi:
 	docker rmi -f $$(docker images -aq)
 
@@ -24,4 +27,3 @@ ps:
 logs:
 	docker-compose -f ./srcs/Docker-compose.yml logs -f
 
-	
