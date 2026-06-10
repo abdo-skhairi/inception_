@@ -10,7 +10,7 @@ sabderra
 
 One more thing: after changing the paths, remove the old volumes and test from scratch:
 
-# docker-compose -f ./srcs/Docker-compose.yml down -v
+# docker-compose -f ./srcs/docker-compose.yml down -v
 # sudo rm -rf /home/sabderra/data/mariadb/*
 # sudo rm -rf /home/sabderra/data/wordpress/*
-# docker-compose -f ./srcs/Docker-compose.yml up --build
+# docker-compose -f ./srcs/docker-compose.yml up --build
