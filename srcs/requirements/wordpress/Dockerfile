@@ -23,5 +23,3 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
     cp wp-cli.phar /usr/local/bin/wp
 
 CMD [ "bash", "/tmp/setup.sh" ]
-
-
