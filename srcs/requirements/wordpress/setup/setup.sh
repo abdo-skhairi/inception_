@@ -1,24 +1,29 @@
 #!/bin/bash
-
 set -e
 
 mkdir -p /var/www/wordpress
 cd /var/www/wordpress
 
-echo "Checking WordPress installation state..."
-
-# Read secrets every time (important: not only on first install)
+# Read secrets
 WP_DB_PASSWORD=$(cat /run/secrets/db_password)
 WP_ADMIN_PASSWORD=$(cat /run/secrets/wp_admin_password)
 WP_USER_PASSWORD=$(cat /run/secrets/wp_user_password)
 
-echo "Configuring WordPress..."
+# Wait for MariaDB
+echo "Waiting for MariaDB..."
+until mysqladmin ping -h "$WORDPRESS_DB_HOST" -u "$WORDPRESS_DB_USER" -p"$WP_DB_PASSWORD" --silent 2>/dev/null; do
+    echo "MariaDB not ready, retrying in 3s..."
+    sleep 3
+done
+echo "MariaDB is ready!"
 
-# Always ensure WordPress is downloaded
+echo "Checking WordPress installation state..."
+
 if [ ! -f wp-config.php ]; then
+    echo "Downloading WordPress..."
     wp core download --locale=en_US --allow-root
-    echo "WordPress downloaded."
 
+    echo "Creating wp-config.php..."
     wp config create \
         --dbname=$WORDPRESS_DB_NAME \
         --dbuser=$WORDPRESS_DB_USER \
@@ -26,8 +31,7 @@ if [ ! -f wp-config.php ]; then
         --dbhost=$WORDPRESS_DB_HOST \
         --allow-root
 
-    echo "Database configuration created."
-
+    echo "Installing WordPress..."
     wp core install \
         --url=$WORDPRESS_URL \
         --title="$WORDPRESS_TITLE" \
@@ -39,16 +43,13 @@ if [ ! -f wp-config.php ]; then
 
     echo "WordPress installed."
 else
-    echo "WordPress already installed, skipping core install."
+    echo "WordPress already installed, skipping."
 fi
 
-# 🔥 ALWAYS enforce correct passwords (IMPORTANT FIX)
-echo "Ensuring admin password is synced with secrets..."
-wp user update $WORDPRESS_ADMIN_USER \
-    --user_pass=$WP_ADMIN_PASSWORD \
-    --allow-root
+# Sync admin password
+wp user update $WORDPRESS_ADMIN_USER --user_pass=$WP_ADMIN_PASSWORD --allow-root
 
-# Create regular user (safe even if already exists)
+# Create regular user
 if [ "$WORDPRESS_USER" != "$WORDPRESS_ADMIN_USER" ]; then
     if ! wp user get $WORDPRESS_USER --allow-root >/dev/null 2>&1; then
         wp user create \
@@ -57,25 +58,18 @@ if [ "$WORDPRESS_USER" != "$WORDPRESS_ADMIN_USER" ]; then
             --user_pass=$WP_USER_PASSWORD \
             --role=author \
             --allow-root
-
         echo "WordPress user created."
     else
         echo "WordPress user already exists."
     fi
-else
-    echo "Regular user skipped (same as admin)."
 fi
 
-# Theme install (idempotent)
+# Theme
 if ! wp theme is-installed oceanwp --allow-root; then
     wp theme install oceanwp --activate --allow-root
-    echo "Theme installed and activated."
 else
     wp theme activate oceanwp --allow-root
-    echo "Theme already installed, activated."
 fi
-
-echo "WordPress configured successfully."
 
 chown -R www-data:www-data /var/www/wordpress
 chmod -R 755 /var/www/wordpress
