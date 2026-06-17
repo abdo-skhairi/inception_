@@ -1,6 +1,6 @@
 # # Secrets and environment
-# secrets/
-# srcs/.env
+secrets/
+srcs/.env
 
 # #OS files
-# .DS_Store
+.DS_Store
