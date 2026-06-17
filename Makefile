@@ -32,6 +32,10 @@ rmc:
 clean: down-v rmi
 	sudo rm -rf $(HOME)/data/mariadb $(HOME)/data/wordpress
 
+fclean:
+	docker container prune -f
+	docker volume prune -f
+
 images:
 	docker-compose -f ./srcs/docker-compose.yml images
 
