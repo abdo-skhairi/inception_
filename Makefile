@@ -2,6 +2,15 @@ up:
 	sudo mkdir -p $(HOME)/data/mariadb $(HOME)/data/wordpress
 	docker-compose -f ./srcs/docker-compose.yml up -d --build
 
+init:
+	mkdir -p srcs/secrets
+	touch srcs/secrets/db_root_password.txt
+	touch srcs/secrets/db_password.txt
+	touch srcs/secrets/wp_admin_password.txt
+	touch srcs/secrets/wp_user_password.txt
+	touch srcs/.env
+	@echo "Files created. Fill in srcs/.env and srcs/secrets/*.txt before running make up"
+
 start:
 	docker-compose -f ./srcs/docker-compose.yml start
 
