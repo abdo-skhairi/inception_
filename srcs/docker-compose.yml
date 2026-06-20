@@ -1,7 +1,9 @@
+version: '3.9'
+
 services:
   mariadb:
     build: ./requirements/mariadb/
-    image: mariadb
+    image: mariadb:inception
     container_name: mariadb_container
     restart: always
     volumes:
@@ -16,11 +18,11 @@ services:
 
   nginx:
     build: ./requirements/nginx
+    image: nginx:inception
     container_name: nginx_container
-    image: nginx
+    restart: always
     ports:
       - "443:443"
-    restart: always
     volumes:
       - wordpress_volume:/var/www/wordpress
     networks:
@@ -30,8 +32,8 @@ services:
 
   wordpress:
     build: ./requirements/wordpress
+    image: wordpress:inception
     container_name: wordpress_container
-    image: wordpress
     restart: always
     volumes:
       - wordpress_volume:/var/www/wordpress
@@ -65,6 +67,14 @@ volumes:
   mariadb_volume:
     name: mariadb_volume
     driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: /home/sabderra/data/mariadb
   wordpress_volume:
     name: wordpress_volume
-    driver: local 
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: /home/sabderra/data/wordpress
