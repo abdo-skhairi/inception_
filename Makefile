@@ -1,5 +1,4 @@
 up:
-	# sudo mkdir -p $(HOME)/data/mariadb $(HOME)/data/wordpress
 	docker-compose -f ./srcs/docker-compose.yml up -d --build
 
 init:
