@@ -1,10 +1,13 @@
-````md
+![Inception Workflow](./inception%20workflow%20v3.png)
+
+
 *This project has been created as part of the 42 curriculum by sabderra.*
 
 # Inception
 
 ## Description
 
+````md
 Inception is a System Administration project from the 42 curriculum that introduces containerization using Docker and Docker Compose.
 
 The goal of the project is to build a secure and modular web infrastructure composed of multiple services running in isolated containers. The infrastructure is deployed using Docker Compose and follows the principle of one service per container.
@@ -21,6 +24,7 @@ The project focuses on containerization, networking, data persistence, security,
 ---
 
 # Project Description
+
 
 This project is based on Docker to virtualize and isolate multiple services inside containers. Each service runs independently and communicates through a Docker network.
 
